@@ -13,18 +13,18 @@ app.use(express.json());
 
 
 function verifyToken(req,res,next) {
-    console.log(req.headers.authorization);
+    console.log('headers', req.headers.authorization);
     if(!req.headers.authorization) {
       return res.status(401).send('Unauthorized request')
     }
     let token = req.headers.authorization.split(' ')[1];
-    console.log(token);
     if(token == 'null') 
     {
       return res.status(401).send('Unauthorized request')    
     }
-    let payload = jwt.verify(token,'secretKey')
-    // console.log(payload);
+    console.log('token', token);
+    let payload = jwt.verify(token, 'secretKey');
+    console.log('payload', payload);
     if(!payload) {
       return res.status(401).send('Unauthorized request')    
     }
@@ -90,7 +90,7 @@ app.get('/api/books',function(req,res){
 });
 
     // to insert book details to the database
-app.post('/api/insertbook',function(req,res){
+app.post('/api/insertbook',verifyToken,function(req,res){
 
     console.log(req.body);
     
