@@ -1,22 +1,12 @@
 const express = require('express');
 const UserData = require('./src/model/UserData');
 const BookData = require('./src/model/BookData');
-
-var app = new express();
+const app = new express();
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-
 const path = require('path');
+
 app.use(express.static('./dist/frontend'));
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname + '/dist/frontend/index.html'));
-   });
-
-
-
-
-
-
 app.use(cors());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
@@ -88,72 +78,79 @@ app.post('/api/login', (req, res) => {
 });
 
 //to get the booklist from the database
-    app.get('/api/books',function(req,res){
-    
-        BookData.find()
-                    .then(function(books){
-                        res.send(books);
-                        // console.log(books);
-                    });
-    });
+app.get('/api/books',function(req,res){
+
+    console.log('hi')
+
+    BookData.find()
+                .then(function(books){
+                    res.send(books);
+                    // console.log(books);
+                });
+});
 
     // to insert book details to the database
-    app.post('/api/insertbook',function(req,res){
-   
-        // console.log(req.body);
-       
-        var book = {       
-            name : req.body.book.name,
-            author : req.body.book.author,
-            description : req.body.book.description,
-            imageUrl : req.body.book.imageUrl,
-       }       
-       var book = new BookData(book);
-       book.save();
+app.post('/api/insertbook',function(req,res){
 
-    });
+    console.log(req.body);
+    
+    var book = {       
+        name : req.body.book.name,
+        author : req.body.book.author,
+        description : req.body.book.description,
+        imageUrl : req.body.book.imageUrl,
+    }       
+    var book = new BookData(book);
+    book.save();
+
+});
 
 //to access the details of single book
-    app.get('/api/:id',  (req, res) => {
-        const id = req.params.id;
-        
-        BookData.findOne({"_id":id})
-        .then((book)=>{
-        
-            res.send(book);
-        });
-    })
+app.get('/api/:id',  (req, res) => {
+    const id = req.params.id;
+    
+    BookData.findOne({"_id":id})
+    .then((book)=>{
+    
+        res.send(book);
+    });
+});
 
 //to update the details of a book
-    app.put('/api/update',(req,res)=>{
-        // console.log(req.body)
-        id=req.body._id,
-        name = req.body.name,
-        author = req.body.author,
-        description = req.body.description,
-        imageUrl = req.body.imageUrl
-       BookData.findByIdAndUpdate({"_id":id},
-                                    {$set:{"name":name,
-                                    "author":author,
-                                    "description":description,
-                                    "imageUrl":imageUrl}})
-       .then(function(){
-           res.send();
-       })
-     })
+app.put('/api/update',(req,res)=>{
+    // console.log(req.body)
+    id=req.body._id,
+    name = req.body.name,
+    author = req.body.author,
+    description = req.body.description,
+    imageUrl = req.body.imageUrl
+    BookData.findByIdAndUpdate({"_id":id},
+                                {$set:{"name":name,
+                                "author":author,
+                                "description":description,
+                                "imageUrl":imageUrl}})
+    .then(function(){
+        res.send();
+    })
+});
      
 
 // to delete a book
 
-    app.delete('/api/remove/:id',(req,res)=>{
-   
-        id = req.params.id;
-        BookData.findByIdAndDelete({"_id":id})
-        .then(()=>{
-            // console.log('success')
-            res.send();
-        })
-      })
+app.delete('/api/remove/:id',(req,res)=>{
+
+    id = req.params.id;
+    BookData.findByIdAndDelete({"_id":id})
+    .then(()=>{
+        // console.log('success')
+        res.send();
+    })
+});
+
+app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname + '/dist/frontend/index.html'));
+});
+    
 app.listen(3000, function(){
     console.log('listening to port 3000');
 });
