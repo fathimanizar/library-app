@@ -10,7 +10,7 @@ var NewCredentialSchema = new Schema({
     lastname: String,
     username: String,
     password: String,
-    confirm_password: String
+    // confirm_password: String
    
 });
 

@@ -40,8 +40,8 @@ app.post('/api/signup',function(req,res){
         firstname : req.body.userdata.firstname,
         lastname : req.body.userdata.lastname,
         username : req.body.userdata.username,
-        password : req.body.userdata.password,
-        confirm_password : req.body.userdata.confirm_password,
+        password : req.body.userdata.password
+        // confirm_password : req.body.userdata.confirm_password,
        
    }       
    var userdata = new UserData(userdata);
@@ -50,32 +50,56 @@ app.post('/api/signup',function(req,res){
 
 // for comparing the username and password entered during login with database 
 
-app.post('/api/login', (req, res) => {
-    let user=req.body;
+// app.post('/api/login', (request, response) => {
+//     let user=request.body;
  
-    UserData.findOne({username:user.username},(error,users)=>{
-        if(error)
-        {
-            console.log(error);
-        }else{
-            if(!users)
-            {
-              res.status(401).send('Invalid username');
-            }else
-            if(users.password!=user.password){
-            res.status(401).send('Invalid password');
-            }else{
-           uname=users.username;
-           pswd=users.password;
-           let payload = {subject:uname+pswd}
-          let token = jwt.sign(payload, 'secretKey')
-          console.log(token);
-          res.status(200).send({token});
+//     UserData.findOne({username:user.username},(error,users)=>{
+//         if(error)
+//         {
+//             console.log(error);
+//         }else{
+//             if(!users)
+//             {
+//               response.status(401).send('Invalid username');
+//             }else
+//             if(users.password!=user.password){
+//                 response.status(401).send('Invalid password');
+//             }else{
+//            uname=users.username;
+//            pswd=users.password;
+//            let payload = {subject:uname+pswd}
+//           let token = jwt.sign(payload, 'secretKey')
+//           console.log(token);
+//           response.status(200).send({token});
 
-            }
+//             }
+//         }
+//     })
+// });
+app.post("/api/login", (req, res) => {
+    let userData = req.body;
+    var flag = false;
+  
+    UserData.find().then(function (user) {
+      console.log("user-db", user);
+      for (let i = 0; i < user.length; i++) {
+        if (userData.username == user[i].username && userData.password == user[i].password) {
+          flag = true;
+          break;
+        } else {
+          flag = false;
         }
-    })
-});
+      }
+      console.log("flag", flag);
+      if (flag == true) {
+        let payload = { subject: userData.username + userData.password };
+        let token = jwt.sign(payload, "secretKey");
+        res.status(200).send({ token });
+      } else {
+        res.status(401).send("Invalid UserName or Password");
+      }
+    });
+  });
 
 //to get the booklist from the database
 app.get('/api/books',function(req,res){
