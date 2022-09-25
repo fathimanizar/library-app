@@ -34,7 +34,7 @@ function verifyToken(req,res,next) {
 // for inserting user details during signup to database
 app.post('/api/signup',function(req,res){
    
-    // console.log(req.body);
+    console.log("userdata from front",req.body);
    
     var userdata = {       
         firstname : req.body.userdata.firstname,
@@ -43,9 +43,12 @@ app.post('/api/signup',function(req,res){
         password : req.body.userdata.password
        
        
-   }       
+   } 
+   console.log("userdata 1",userdata);      
    var userdata = new UserData(userdata);
+   console.log("userdata 2",userdata);  
    userdata.save();
+   res.status(200).send({status:'Signup completed successfully'});
 });
 
 // for comparing the username and password entered during login with database 
