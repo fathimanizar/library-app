@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/LibraryDB');
+mongoose.connect('mongodb+srv://Fathimanizar:fathimanabianoob@testcluster.cv1hp4e.mongodb.net/?retryWrites=true&w=majority');
 const Schema = mongoose.Schema;
 
 var NewCredentialSchema = new Schema({
