@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/LibraryDB',{
-    useNewUrlParser:true,
-    useUnifiedTopology:true
-});
+mongoose.connect('mongodb://localhost:27017/LibraryDB');
 const Schema = mongoose.Schema;
 
 var NewCredentialSchema = new Schema({
@@ -10,7 +7,7 @@ var NewCredentialSchema = new Schema({
     lastname: String,
     username: String,
     password: String,
-    // confirm_password: String
+    confirm_password: String
    
 });
 

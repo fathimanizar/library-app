@@ -41,7 +41,7 @@ app.post('/api/signup',function(req,res){
         lastname : req.body.userdata.lastname,
         username : req.body.userdata.username,
         password : req.body.userdata.password
-        // confirm_password : req.body.userdata.confirm_password,
+       
        
    }       
    var userdata = new UserData(userdata);
@@ -132,7 +132,7 @@ app.post('/api/insertbook',verifyToken,function(req,res){
 //to access the details of single book
 app.get('/api/:id',  (req, res) => {
     const id = req.params.id;
-    
+    console.log("req id",id);
     BookData.findOne({"_id":id})
     .then((book)=>{
     
